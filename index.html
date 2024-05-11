@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>母亲节祝福</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        #console-output {
+            font-family: monospace;
+            background-color: #f5f5f5;
+            padding: 10px;
+            margin: 20px auto;
+            border-radius: 5px;
+            width: 80%;
+            white-space: pre-wrap;
+            font-size: 24px;
+        }
+        .flower-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto; /* 调整爱心canvas的外边距 */
+            border: 1px solid #000; /* 添加边框以便于查看canvas */
+        }
+        h1 {
+            margin: 40px 0 20px;
+            font-size: 48px;/* 调整标题外边距 */
+        }
+        p.attribution {
+        font-size: 24px; /* 调整这段文字的字体大小 */
+        margin-top: 40px; /* 可以根据需要调整外边距 */
+    }
+    </style>
+</head>
+<body>
+    <h1>母亲节祝福</h1>
+    <canvas id="heartCanvas"></canvas> <!-- 放置canvas元素 -->
+    <div id="console-output"></div>
+    <img src="Flower.jpg" alt="花朵" class="flower-image">
+    <p class="attribution">女儿 敬上</p>
+
+    <script>
+        const stoptimeshort = 50; // 短暂停，单位为毫秒
+        const stoptimelong = 500; // 长暂停，单位为毫秒
+
+        function printWithPause(text, pause, callback) {
+            let index = 0;
+            const outputElement = document.getElementById('console-output');
+            function printNextChar() {
+                if (index < text.length) {
+                    outputElement.innerHTML += text.charAt(index);
+                    index++;
+                    setTimeout(printNextChar, pause);
+                } else {
+                    outputElement.innerHTML += '<br><br>';
+                    callback();
+                }
+            }
+            printNextChar();
+        }
+
+        const messages = [
+            "走过岁月，您的步伐始终从容",
+            "年华浪漫，您无悔地绽放笑容",
+            "您安静地沉没了自己的灿烂",
+            "只为把最好的一切留给我们",
+            "今天是您的节日",
+            "亲爱的母亲",
+            "我想用最简单的话语",
+            "表达最深的情感：",
+            "母亲节快乐",
+            "愿幸福和安康与您同在",
+            "感谢您十九年的养育",
+            "妈妈您辛苦了",
+            "我爱您！"];
+
+        let currentMessageIndex = 0;
+        const typeOutMessages = () => {
+            if (currentMessageIndex < messages.length) {
+                printWithPause(messages[currentMessageIndex], stoptimeshort, () => {
+                    currentMessageIndex++;
+                    setTimeout(typeOutMessages, stoptimelong);
+                });
+            }
+        };
+
+        window.onload = typeOutMessages;
+
+        // 动态爱心效果的JavaScript代码
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = 640;
+        const height = 480;
+        const center = { x: width / 2, y: height / 2 };
+        const heartColor = "#FFB0C9";
+        const enlarge = 11;
+        const message = "🌹 母亲节快乐 🌹";
+        const fontSize = 36;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        function heartFunction(t) {
+            let x = 16 * Math.pow(Math.sin(t), 3);
+            let y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+            x = x * enlarge + center.x;
+            y = y * enlarge + center.y;
+            return [x, y];
+        }
+
+        function animate(timestamp) {
+            ctx.clearRect(0, 0, width, height);
+            const scale = 1 + 0.5 * Math.sin(timestamp / 1000);
+
+            for (let i = 0; i < 1000; i++) {
+                const t = Math.random() * 2 * Math.PI;
+                const [x, y] = heartFunction(t);
+                const size = Math.random() * 3 + 1;
+                ctx.beginPath();
+                ctx.arc(x, y, size * scale, 0, 2 * Math.PI);
+                ctx.fillStyle = heartColor;
+                ctx.fill();
+            }
+
+            // 绘制文字
+            ctx.font = `${fontSize}px Arial`;
+            ctx.fillStyle = heartColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(message, center.x, center.y + fontSize / 2); // 调整文字垂直位置，使其居中
+
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
